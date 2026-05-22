@@ -4,13 +4,24 @@ Hevva syncs your [Hevy](https://www.hevyapp.com) workout data into Strava automa
 
 ---
 
+## Docker images
+
+Two images are published to [GitHub Container Registry](https://ghcr.io/dharmendra-gupta/hevva):
+
+| Image | Description |
+|-------|-------------|
+| `ghcr.io/dharmendra-gupta/hevva:latest` | Standalone — uvicorn on port 8000. Put your own reverse proxy in front. |
+| `ghcr.io/dharmendra-gupta/hevva:caddy` | Bundled with Caddy — auto-HTTPS via Let's Encrypt on ports 80/443. Good if you have no existing reverse proxy. |
+
+---
+
 ## Before you start
 
 You need:
 
 - A [Strava API application](https://www.strava.com/settings/api) — free to create
 - A Hevy account with API access
-- Docker + Docker Compose on your server
+- Docker on your server
 - A domain pointed at your server (required — Strava webhooks only work over HTTPS)
 
 ---
@@ -48,50 +59,78 @@ STRAVA_REDIRECT_URI=https://hevva.yourdomain.com/auth/callback
 
 Pick the setup that matches your situation.
 
-#### I don't have a reverse proxy yet
+#### Option A — Caddy bundled image (no existing proxy)
 
-The simplest option is [Caddy](https://caddyserver.com) — it handles HTTPS automatically with no certificate config needed.
+The `:caddy` image runs Caddy alongside the app and handles HTTPS automatically. Add `DOMAIN` to your `.env`:
 
-`docker-compose.yml` addition:
+```env
+DOMAIN=hevva.yourdomain.com
+```
+
+Then run:
+
+```bash
+docker run -d \
+  --name hevva \
+  -p 80:80 \
+  -p 443:443 \
+  --env-file .env \
+  -v ./data:/app/data \
+  -v caddy_data:/data \
+  --restart unless-stopped \
+  ghcr.io/dharmendra-gupta/hevva:caddy
+```
+
+Caddy stores Let's Encrypt certificates in `/data` — mount a named volume so they survive restarts. Ports 80 and 443 must be reachable from the internet for the ACME challenge to succeed.
+
+Or with compose:
 
 ```yaml
 services:
-  caddy:
-    image: caddy:2-alpine
+  hevva:
+    image: ghcr.io/dharmendra-gupta/hevva:caddy
     ports:
       - "80:80"
       - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
-    networks:
-      - hevva_net
-
-  hevva:
-    build: .
     env_file: .env
     volumes:
       - ./data:/app/data
-    networks:
-      - hevva_net
+      - caddy_data:/data
     restart: unless-stopped
-
-networks:
-  hevva_net:
 
 volumes:
   caddy_data:
 ```
 
-`Caddyfile`:
+---
 
-```
-hevva.yourdomain.com {
-    reverse_proxy hevva:8000
-}
+#### Option B — Existing nginx (standalone image)
+
+Use the `:latest` image and proxy to it from your existing nginx. Put Hevva on the same Docker network as nginx.
+
+Find your nginx network name:
+
+```bash
+docker network ls
 ```
 
-#### I already have nginx running
+`docker-compose.yml`:
+
+```yaml
+services:
+  hevva:
+    image: ghcr.io/dharmendra-gupta/hevva:latest
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+    networks:
+      - your_nginx_network_name
+    restart: unless-stopped
+
+networks:
+  your_nginx_network_name:
+    external: true
+```
 
 Add to your nginx config (see `nginx/hevva.subdomain.conf` for the full template):
 
@@ -121,38 +160,28 @@ server {
 }
 ```
 
-Then put Hevva on the same Docker network as your nginx container. Find your nginx network name:
+Then reload nginx:
 
 ```bash
-docker network ls
-```
-
-Add to `docker-compose.yml`:
-
-```yaml
-services:
-  hevva:
-    build: .
-    env_file: .env
-    volumes:
-      - ./data:/app/data
-    networks:
-      - your_nginx_network_name
-    restart: unless-stopped
-
-networks:
-  your_nginx_network_name:
-    external: true
+nginx -t && nginx -s reload
 ```
 
 > If you host multiple services under a single domain (e.g. `yourdomain.com/hevva/`), see `nginx/hevva.path.conf` for a path-based config.
 
 ---
 
+#### Option C — Existing nginx + Cloudflare
+
+Same as Option B, but Cloudflare terminates SSL so your nginx config is simpler (no cert paths needed if you use Cloudflare Origin CA certs or Flexible mode).
+
+In Cloudflare DNS, add an A record for `hevva.yourdomain.com` pointing to your server IP with the proxy enabled (orange cloud). Set SSL/TLS mode to **Full** or **Full (strict)** — the same as your other services.
+
+---
+
 ### Step 4 — Start the container
 
 ```bash
-docker-compose up -d --build
+docker compose up -d
 ```
 
 ---
@@ -174,7 +203,7 @@ This redirects you to Strava to authorize the app. After you approve, you're sen
 On startup, Hevva registers the Strava webhook automatically (you'll see it in the logs). From this point, every new `WeightTraining` or `Workout` activity on Strava will be enriched with your Hevy data.
 
 ```bash
-docker-compose logs -f
+docker compose logs -f
 ```
 
 Look for:
@@ -206,6 +235,7 @@ Webhook subscription registered (id=XXXXX)
 | `HEVY_API_KEY` | Yes | — | From Hevy |
 | `WEBHOOK_CALLBACK_URL` | Yes | — | Public URL Strava posts events to |
 | `STRAVA_REDIRECT_URI` | Yes | — | Must match your Strava app settings exactly |
+| `DOMAIN` | Caddy only | — | Your domain — used by the `:caddy` image for auto-HTTPS |
 | `SYNC_WINDOW_SECONDS` | No | `1800` | How close in time (seconds) a Hevy workout must be to a Strava activity to be matched |
 
 ---
