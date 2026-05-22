@@ -246,3 +246,23 @@ Webhook subscription registered (id=XXXXX)
 - Activities that don't match a Hevy workout within the sync window are left unchanged.
 - Only `WeightTraining` and `Workout` sport types are processed. All other activity types (runs, rides, walks) are ignored.
 - Want to run OAuth from your local machine instead of the browser flow? Use `python setup.py` — see comments in that file.
+
+---
+
+## Legal
+
+Hevva is an independent open-source project and is **not affiliated with, endorsed by, or officially connected to Strava, Inc. or Hevy**. Use of their APIs is subject to their respective terms:
+
+- [Strava API Agreement](https://www.strava.com/legal/api)
+- [Hevy Terms of Service](https://hevy.com/terms)
+
+Strava is a trademark of Strava, Inc. & Hevy is a trademark of Hevy Inc. All trademarks are the property of their respective owners.
+
+This software is provided under the [MIT License](./LICENSE).
+
+---
+
+## Contributors
+
+- [Dharmendra Gupta](https://github.com/dharmendra-gupta) — author
+- [Claude](https://claude.ai) by [Anthropic](https://anthropic.com) — AI co-contributor
