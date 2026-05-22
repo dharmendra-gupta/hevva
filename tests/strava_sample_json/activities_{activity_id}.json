@@ -1,0 +1,121 @@
+{
+    "resource_state": 3,
+    "athlete": {
+        "id": 189703674,
+        "resource_state": 1
+    },
+    "name": "test-description-update-postman",
+    "distance": 0.0,
+    "moving_time": 5,
+    "elapsed_time": 5,
+    "total_elevation_gain": 0,
+    "type": "WeightTraining",
+    "sport_type": "WeightTraining",
+    "workout_type": 30,
+    "device_name": "Strava App",
+    "id": 18604698509,
+    "start_date": "2026-05-22T07:00:58Z",
+    "start_date_local": "2026-05-22T12:30:58Z",
+    "timezone": "(GMT+05:30) Asia/Kolkata",
+    "utc_offset": 19800.0,
+    "location_city": null,
+    "location_state": null,
+    "location_country": null,
+    "achievement_count": 0,
+    "kudos_count": 0,
+    "comment_count": 0,
+    "athlete_count": 1,
+    "photo_count": 0,
+    "map": {
+        "id": "a18604698509",
+        "polyline": "",
+        "resource_state": 3,
+        "summary_polyline": ""
+    },
+    "trainer": true,
+    "commute": false,
+    "manual": false,
+    "private": true,
+    "visibility": "only_me",
+    "flagged": false,
+    "gear_id": null,
+    "start_latlng": [],
+    "end_latlng": [],
+    "average_speed": 0.0,
+    "max_speed": 0.0,
+    "has_heartrate": false,
+    "heartrate_opt_out": false,
+    "display_hide_heartrate_option": false,
+    "elev_high": 0.0,
+    "elev_low": 0.0,
+    "upload_id": 19711427137,
+    "upload_id_str": "19711427137",
+    "external_id": "8a84cf9d-6c0c-4c17-bda8-bb62264c1363-activity.fit",
+    "from_accepted_tag": false,
+    "pr_count": 0,
+    "total_photo_count": 0,
+    "has_kudoed": false,
+    "description": "### Hevy Workout: Reactivation Workout 5\n\n  **Seated Chest Press (Cable)**\n  - Set 1: 15 reps @ 10kg\n  - Set 2: 15 reps @ 10kg\n  - Set 3: 18 reps @ 10kg\n\n  **Face Pull**\n  - Set 1: 15 reps @ 5kg\n  - Set 2: 15 reps @ 5kg\n  - Set 3: 15 reps @ 5kg\n  - Set 4: 15 reps @ 5kg\n\n  **Leg Press (Machine)** | Superset0\n  - Set 1: 15 reps @ 45kg\n  - Set 2: 15 reps @ 45kg\n  - Set 3: 15 reps @ 45kg\n\n  **Seated Cable Row - V Grip (Cable)** | Superset0\n  - Set 1: 15 reps @ 15kg\n  - Set 2: 15 reps @ 15kg\n  - Set 3: 15 reps @ 15kg\n\n  **Lying Leg Curl (Machine)** | Superset1\n  - Set 1: 15 reps @ 10kg\n  - Set 2: 12 reps @ 10kg\n  - Set 3: 12 reps @ 10kg\n\n  **Plank** | Superset1\n  - Set 1: 60s\n  - Set 2: 60s\n  - Set 3: 60s\n\n  **Single Leg Decline Squats**\n  - Set 1: 12 reps\n  - Set 2: 12 reps\n  - Set 3: 12 reps",
+    "calories": 0,
+    "perceived_exertion": null,
+    "prefer_perceived_exertion": false,
+    "segment_efforts": [],
+    "laps": [
+        {
+            "id": 66556286669,
+            "resource_state": 2,
+            "name": "Lap 1",
+            "activity": {
+                "id": 18604698509,
+                "visibility": "only_me",
+                "resource_state": 1
+            },
+            "athlete": {
+                "id": 189703674,
+                "resource_state": 1
+            },
+            "elapsed_time": 16,
+            "moving_time": 4,
+            "start_date": "2026-05-22T07:00:58Z",
+            "start_date_local": "2026-05-22T12:30:58Z",
+            "distance": 0.0,
+            "average_speed": 0.0,
+            "max_speed": 0.0,
+            "lap_index": 1,
+            "split": 1,
+            "start_index": 0,
+            "end_index": 1,
+            "total_elevation_gain": 0,
+            "device_watts": false
+        }
+    ],
+    "photos": {
+        "primary": null,
+        "count": 0
+    },
+    "stats_visibility": [
+        {
+            "type": "heart_rate",
+            "visibility": "everyone"
+        },
+        {
+            "type": "pace",
+            "visibility": "everyone"
+        },
+        {
+            "type": "power",
+            "visibility": "everyone"
+        },
+        {
+            "type": "speed",
+            "visibility": "everyone"
+        },
+        {
+            "type": "calories",
+            "visibility": "everyone"
+        }
+    ],
+    "hide_from_home": false,
+    "embed_token": "e60884540f8ee21befbce4eb2f50f58ba82ce12b",
+    "available_zones": []
+}

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  hevva:
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    networks:
+      - nginx_network
+    restart: unless-stopped
+
+networks:
+  nginx_network:
+    external: true

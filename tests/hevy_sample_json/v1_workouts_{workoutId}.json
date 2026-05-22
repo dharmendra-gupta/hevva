@@ -1,0 +1,295 @@
+{
+    "id": "33770f07-0336-4c4c-94d8-34275b4fe1ca",
+    "title": "Reactivation Workout 5",
+    "routine_id": null,
+    "description": "",
+    "start_time": "2026-05-21T02:15:44+00:00",
+    "end_time": "2026-05-21T03:44:05+00:00",
+    "updated_at": "2026-05-22T06:02:58.244Z",
+    "created_at": "2026-05-21T03:44:15.133Z",
+    "exercises": [
+        {
+            "index": 0,
+            "title": "Seated Chest Press (Cable)",
+            "notes": "",
+            "exercise_template_id": "103caeff-498a-43bb-a510-7ae6d1839029",
+            "superset_id": null,
+            "sets": [
+                {
+                    "index": 0,
+                    "type": "normal",
+                    "weight_kg": 10,
+                    "reps": 15,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 1,
+                    "type": "normal",
+                    "weight_kg": 10,
+                    "reps": 15,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 2,
+                    "type": "normal",
+                    "weight_kg": 10,
+                    "reps": 18,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                }
+            ]
+        },
+        {
+            "index": 1,
+            "title": "Face Pull",
+            "notes": "",
+            "exercise_template_id": "BE640BA0",
+            "superset_id": null,
+            "sets": [
+                {
+                    "index": 0,
+                    "type": "normal",
+                    "weight_kg": 5,
+                    "reps": 15,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 1,
+                    "type": "normal",
+                    "weight_kg": 5,
+                    "reps": 15,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 2,
+                    "type": "normal",
+                    "weight_kg": 5,
+                    "reps": 15,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 3,
+                    "type": "normal",
+                    "weight_kg": 5,
+                    "reps": 15,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                }
+            ]
+        },
+        {
+            "index": 2,
+            "title": "Leg Press (Machine)",
+            "notes": "",
+            "exercise_template_id": "C7973E0E",
+            "superset_id": 0,
+            "sets": [
+                {
+                    "index": 0,
+                    "type": "normal",
+                    "weight_kg": 45,
+                    "reps": 15,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 1,
+                    "type": "normal",
+                    "weight_kg": 45,
+                    "reps": 15,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 2,
+                    "type": "normal",
+                    "weight_kg": 45,
+                    "reps": 15,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                }
+            ]
+        },
+        {
+            "index": 3,
+            "title": "Seated Cable Row - V Grip (Cable)",
+            "notes": "",
+            "exercise_template_id": "0393F233",
+            "superset_id": 0,
+            "sets": [
+                {
+                    "index": 0,
+                    "type": "normal",
+                    "weight_kg": 15,
+                    "reps": 15,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 1,
+                    "type": "normal",
+                    "weight_kg": 15,
+                    "reps": 15,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 2,
+                    "type": "normal",
+                    "weight_kg": 15,
+                    "reps": 15,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                }
+            ]
+        },
+        {
+            "index": 4,
+            "title": "Lying Leg Curl (Machine)",
+            "notes": "",
+            "exercise_template_id": "B8127AD1",
+            "superset_id": 1,
+            "sets": [
+                {
+                    "index": 0,
+                    "type": "normal",
+                    "weight_kg": 10,
+                    "reps": 15,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 1,
+                    "type": "normal",
+                    "weight_kg": 10,
+                    "reps": 12,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 2,
+                    "type": "normal",
+                    "weight_kg": 10,
+                    "reps": 12,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                }
+            ]
+        },
+        {
+            "index": 5,
+            "title": "Plank",
+            "notes": "",
+            "exercise_template_id": "C6C9B8A0",
+            "superset_id": 1,
+            "sets": [
+                {
+                    "index": 0,
+                    "type": "normal",
+                    "weight_kg": null,
+                    "reps": null,
+                    "distance_meters": null,
+                    "duration_seconds": 60,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 1,
+                    "type": "normal",
+                    "weight_kg": null,
+                    "reps": null,
+                    "distance_meters": null,
+                    "duration_seconds": 60,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 2,
+                    "type": "normal",
+                    "weight_kg": null,
+                    "reps": null,
+                    "distance_meters": null,
+                    "duration_seconds": 60,
+                    "rpe": null,
+                    "custom_metric": null
+                }
+            ]
+        },
+        {
+            "index": 6,
+            "title": "Single Leg Decline Squats",
+            "notes": "",
+            "exercise_template_id": "8613eb72-85ef-4887-b16f-46d8e1d15b1b",
+            "superset_id": null,
+            "sets": [
+                {
+                    "index": 0,
+                    "type": "normal",
+                    "weight_kg": null,
+                    "reps": 12,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 1,
+                    "type": "normal",
+                    "weight_kg": null,
+                    "reps": 12,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                },
+                {
+                    "index": 2,
+                    "type": "normal",
+                    "weight_kg": null,
+                    "reps": 12,
+                    "distance_meters": null,
+                    "duration_seconds": null,
+                    "rpe": null,
+                    "custom_metric": null
+                }
+            ]
+        }
+    ]
+}

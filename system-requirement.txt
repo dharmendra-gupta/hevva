@@ -1,0 +1,95 @@
+You are an expert software engineer specializing in Python, FastAPI, and robust event-driven integrations. Your task is to build **Hevva**, a lightweight, self-hosted automation engine that automatically syncs detailed weightlifting metrics from Hevy into Garmin-generated Strava activities.
+
+### Project Context & Philosophy
+- **Name:** Hevva
+- **Tech Stack:** Python 3.11+, FastAPI (for high speed and minimal idle memory footprint), SQLite, Pytest, Docker.
+- **Tone/Style:** Production-grade, modular, self-contained, and highly documented. 
+
+---
+
+### 1. Functional System Requirements
+
+- **FR-1: Webhook Handling (/webhook)**
+  - Expose a FastAPI path handling both `GET` and `POST` methods on `/webhook`.
+  - **GET Loop:** Implement the mandatory Strava Webhook Handshake Verification. It must look for `hub.mode=subscribe`, verify a local `STRAVA_VERIFY_TOKEN`, and echo back `hub.challenge` cleanly inside a JSON response.
+  - **POST Loop:** Act as an async listener for real-time Strava updates (`aspect_type: "create"`, `object_type: "activity"`).
+- **FR-2: Categorical Type Isolation Engine**
+  - Upon receiving an activity ID via webhook, fetch its complete metadata details from Strava.
+  - Verify if `sport_type == "WeightTraining"` or `"Workout"`. If it doesn't match, log the drop event, immediately return an HTTP `200 OK` status, and gracefully terminate processing.
+- **FR-3: Temporal Range Matching Matrix**
+  - Fetch recent completed workouts from the Hevy API (`GET /v1/workouts` with headers `api-key: HEVY_API_KEY`).
+  - Calculate the temporal delta between the Strava activity `start_date` and the Hevy workout `end_time` or `start_time` configurations using the following evaluation formula:
+    Δt = |t_strava - t_hevy| <= SYNC_WINDOW_SECONDS (defaulting to 1800 seconds / 30 minutes).
+- **FR-4: Transactional Text Composition Assembler**
+  - Extract the matching Hevy workout JSON array (Exercises, Sets, Reps, and Weights).
+  - Format the elements into a clean, human-readable markdown block layout to populate the Strava descriptions.
+- **FR-5: Single-Call Payload Overwriting**
+  - Group modifications into a single HTTP `PUT /activities/{id}` API transaction to Strava.
+  - Overwrite the generic title with the explicit title from Hevy (e.g., "Hevy: Push Day - Hypertrophy Tier 1") and swap out empty placeholder logs with your compiled summary text block.
+
+---
+
+### 2. Technical and Architectural Requirements
+
+- **NFR-1: Resource Constraint Profile:** Maintain a static idle runtime profile under 40MB of system RAM (highly efficient FastAPI implementation).
+- **NFR-2: Decoupled Secret Integrity Strategy:** Never hardcode secrets. Use a modular configurations layer using `pydantic-settings`. It must natively pull configurations from system environment variables first, falling back to a root-level `.env` configuration file if present. Include an `.env.example` in the root structure.
+- **NFR-3: Automated Persistence Token Lifecycle Management:** Access tokens expire every 6 hours. Before executing any write mutation to Strava, evaluate the remaining token lifespan (`token_expires_at`). If near expiration, trigger a background refresh payload transaction, overwrite expired entries in the persistence database, and cleanly resume execution without failing.
+- **NFR-4: Idempotency Validation:** Store successfully matched `object_id` references inside a minimal SQLite database layout (`./data/Hevva.db`) to ensure a single webhook delivery retry never triggers redundant processing cycles or duplicates.
+
+---
+
+### 3. Comprehensive Testing Specifications
+
+You must build a complete testing engine using `pytest`. The system must enforce two distinct test paradigms:
+
+1.  **Unit Tests (`tests/test_unit.py`):**
+    - Verify the time-delta matching algorithms across edge conditions (exactly 29 minutes vs 31 minutes).
+    - Validate the text composition rendering module using static nested Hevy JSON input fixtures.
+    - Test that the webhook parser rejects non-strength training files (e.g. `sport_type: "Running"`) with an HTTP `200 OK` without triggering external api integrations.
+2.  **Integration Testing Simulations (`tests/test_integration.py`):**
+    - Provide a script that sets up a local FastAPI instance wrapper.
+    - Generate fake weightlifting object definitions inside automated client logic.
+    - Fire a simulated inbound HTTP `POST` webhook transaction to your engine's endpoint.
+    - Assert that your engine successfully returns `200 OK`, handles internal logic flags, and securely builds the expected outbound update payload block.
+
+---
+
+### 4. Continuous Integration (CI/CD) Configuration
+
+Provide a production-grade `.github/workflows/ci-gatekeeper.yml` pipeline that triggers on any pull request into the `main` branch:
+1. Runs a strict static security analysis scan via Gitleaks to block plain-text key inclusions.
+2. Spins up a testing runner environment executing `pytest tests/`.
+3. Blocks merge access automatically if code lint checks or test paths fail.
+
+---
+
+### 5. Repository Foundation Structure
+
+Create a clean architecture file layout exactly as follows:
+```text
+Hevva/
+├── .env.example
+├── .gitignore
+├── Dockerfile
+├── docker-compose.yml
+├── README.md
+├── requirements.txt
+├── main.py
+├── core/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── database.py
+│   ├── processing.py
+│   └─ strava_oauth.py
+└── tests/
+    ├── __init__.py
+    ├── test_unit.py
+    └─ test_integration.py
+
+---
+
+### 6. NOTES
+
+1. Your code will be reviewed by CODEX and Senior Developer
+2. Use any api endpoints as per starva and hevy developer reference
+3. Do not hallucinate  
