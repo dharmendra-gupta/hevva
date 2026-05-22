@@ -32,7 +32,6 @@ async def fetch_hevy_workouts() -> List[Dict[str, Any]]:
 
 def format_hevy_workout(workout: Dict[str, Any]) -> str:
     description = "Updated by Hevva\n\n"
-    description += f"{workout['title']}\n\n"
     for exercise in workout["exercises"]:
         superset_id = exercise.get("superset_id")
         header = exercise['title']
@@ -101,7 +100,7 @@ async def process_strava_activity(activity_id: int):
                     break
         
         if matching_hevy_workout:
-            title = f"Hevy: {matching_hevy_workout['title']}"
+            title = matching_hevy_workout['title']
             description = format_hevy_workout(matching_hevy_workout)
             await update_strava_activity(activity_id, title, description)
             logger.info(f"Successfully updated Strava activity {activity_id} with Hevy workout data.")

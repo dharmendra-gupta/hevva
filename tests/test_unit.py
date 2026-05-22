@@ -277,7 +277,6 @@ def test_text_composition_rendering(mock_hevy_workouts):
     workout = mock_hevy_workouts[0]
     expected = (
         "Updated by Hevva\n\n"
-        "Push Day - Hypertrophy Tier 1\n\n"
         "Barbell Bench Press\n"
         "- Set 1: 8 reps @ 100kg RPE: 7\n"
         "- Set 2: 8 reps @ 100kg RPE: 7.5\n\n"
@@ -298,7 +297,6 @@ def test_format_markdown_workout_with_no_exercises():
     workout = {"title": "Empty Session", "exercises": []}
     result = format_hevy_workout(workout)
     assert result.startswith("Updated by Hevva\n\n")
-    assert "Empty Session" in result
 
 
 def test_format_real_hevy_response():
@@ -314,7 +312,6 @@ def test_format_real_hevy_response():
     print("---")
 
     assert result.startswith("Updated by Hevva\n\n")
-    assert "Reactivation Workout 5" in result
     assert "Seated Chest Press (Cable)" in result
     assert "Face Pull" in result
     assert "Leg Press (Machine) [superset:0]" in result
