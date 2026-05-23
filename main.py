@@ -2,7 +2,7 @@ import asyncio
 import logging
 import httpx
 from fastapi import Depends, FastAPI, Form, Request, HTTPException
-from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi.responses import RedirectResponse, HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from jinja2 import Environment, FileSystemLoader
 from pydantic import BaseModel
@@ -79,6 +79,11 @@ async def update_config(key: str = Form(...), value: str = Form(...), _: None = 
             return _error("Sync window must be between 60 and 86400 seconds.")
     set_config(key, value)
     return RedirectResponse("/?saved=1", status_code=303)
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse("frontend/static/favicon-32.png", media_type="image/png")
 
 
 @app.get("/health")
