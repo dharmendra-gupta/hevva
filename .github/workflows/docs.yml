@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "docs/**"
+      - "frontend/docs/**"
       - "mkdocs.yml"
   workflow_dispatch:
 
@@ -38,7 +38,7 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: site/
+          path: frontend/site/
 
       - uses: actions/deploy-pages@v4
         id: deployment

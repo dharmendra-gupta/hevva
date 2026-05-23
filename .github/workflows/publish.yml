@@ -6,7 +6,8 @@ on:
     paths-ignore:
       - "**.md"
       - "LICENSE"
-      - "docs/**"
+      - "frontend/docs/**"
+      - "frontend/site/**"
   release:
     types: [published]
 
