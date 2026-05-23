@@ -304,3 +304,85 @@ def test_webhook_post_real_strava_payload(client):
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
     mock_process.assert_called_once_with(payload["object_id"])
+
+
+# ---------------------------------------------------------------------------
+# Dashboard GET /
+# ---------------------------------------------------------------------------
+
+def test_dashboard_requires_auth(client):
+    response = client.get("/", follow_redirects=False)
+    assert response.status_code == 401
+
+
+def test_dashboard_returns_html_when_authorized(client):
+    with patch("main.get_strava_tokens", return_value=("tok", "ref", 9999999999)):
+        response = client.get("/", auth=("admin", "changeme"))
+    assert response.status_code == 200
+    assert "Hevva" in response.text
+    assert "Strava authorized" in response.text
+    assert "Sync window" in response.text
+
+
+def test_dashboard_shows_not_authorized_status(client):
+    with patch("main.get_strava_tokens", return_value=None):
+        response = client.get("/", auth=("admin", "changeme"))
+    assert response.status_code == 200
+    assert "Not authorized" in response.text
+    assert "/auth/login" in response.text
+
+
+def test_dashboard_shows_saved_message(client):
+    with patch("main.get_strava_tokens", return_value=None):
+        response = client.get("/?saved=1", auth=("admin", "changeme"))
+    assert response.status_code == 200
+    assert "Settings saved" in response.text
+
+
+# ---------------------------------------------------------------------------
+# Config update POST /api/config
+# ---------------------------------------------------------------------------
+
+def test_config_update_requires_auth(client):
+    response = client.post("/api/config", data={"key": "SYNC_WINDOW_SECONDS", "value": "900"})
+    assert response.status_code == 401
+
+
+def test_config_update_valid_saves_and_redirects(client):
+    with patch("main.set_config") as mock_set:
+        response = client.post(
+            "/api/config",
+            data={"key": "SYNC_WINDOW_SECONDS", "value": "900"},
+            auth=("admin", "changeme"),
+            follow_redirects=False,
+        )
+    assert response.status_code == 303
+    assert response.headers["location"] == "/?saved=1"
+    mock_set.assert_called_once_with("SYNC_WINDOW_SECONDS", "900")
+
+
+def test_config_update_unknown_key_returns_400(client):
+    response = client.post(
+        "/api/config",
+        data={"key": "UNKNOWN_KEY", "value": "123"},
+        auth=("admin", "changeme"),
+    )
+    assert response.status_code == 400
+
+
+def test_config_update_invalid_value_returns_400(client):
+    response = client.post(
+        "/api/config",
+        data={"key": "SYNC_WINDOW_SECONDS", "value": "not_a_number"},
+        auth=("admin", "changeme"),
+    )
+    assert response.status_code == 400
+
+
+def test_config_update_out_of_range_returns_400(client):
+    response = client.post(
+        "/api/config",
+        data={"key": "SYNC_WINDOW_SECONDS", "value": "59"},
+        auth=("admin", "changeme"),
+    )
+    assert response.status_code == 400

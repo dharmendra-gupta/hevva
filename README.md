@@ -198,7 +198,23 @@ This redirects you to Strava to authorize the app. After you approve, you're sen
 
 ---
 
-### Step 6 — Done
+### Step 6 — Disable Hevy's native Strava sync
+
+Hevva updates your wearable activity (from Garmin, Polar, Coros, etc.) with Hevy workout data. If Hevy's own Strava sync is still enabled, Hevy will also push a separate activity to Strava for the same session — leaving you with two entries per workout.
+
+To avoid this, turn off Hevy's Strava integration:
+
+1. Open the Hevy app
+2. Go to **Profile → Settings → Connected Apps**
+3. Disconnect **Strava**
+
+Hevva does not delete activities on your behalf — this step is yours to do once.
+
+> If you don't use a separate wearable and only track workouts in Hevy, leave Hevy's sync enabled and skip Hevva — it's designed for athletes tracking the same session in both a wearable and Hevy.
+
+---
+
+### Step 7 — Done
 
 On startup, Hevva registers the Strava webhook automatically (you'll see it in the logs). From this point, every new `WeightTraining` or `Workout` activity on Strava will be enriched with your Hevy data.
 
@@ -237,11 +253,14 @@ Webhook subscription registered (id=XXXXX)
 | `STRAVA_REDIRECT_URI` | Yes | — | Must match your Strava app settings exactly |
 | `DOMAIN` | Caddy only | — | Your domain — used by the `:caddy` image for auto-HTTPS |
 | `SYNC_WINDOW_SECONDS` | No | `1800` | How close in time (seconds) a Hevy workout must be to a Strava activity to be matched |
+| `DASHBOARD_USERNAME` | Yes | — | Username for the web dashboard |
+| `DASHBOARD_PASSWORD` | Yes | — | Password for the web dashboard |
 
 ---
 
 ## Notes
 
+- Disable Hevy's native Strava sync (Hevy → Settings → Connected Apps) to avoid duplicate activities. Hevva updates your wearable activity with Hevy data — it does not delete the extra Hevy entry for you.
 - Tokens are stored in `./data/Hevva.db` (SQLite) and refreshed automatically — you never need to re-authorize unless you revoke access on Strava.
 - Activities that don't match a Hevy workout within the sync window are left unchanged.
 - Only `WeightTraining` and `Workout` sport types are processed. All other activity types (runs, rides, walks) are ignored.

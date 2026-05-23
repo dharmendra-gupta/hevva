@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import Dict, Any, List
 
 from core.config import settings
-from core.database import is_activity_processed, record_processed_activity, update_strava_tokens
+from core.database import is_activity_processed, record_processed_activity, update_strava_tokens, get_config
 from core.strava_oauth import get_strava_headers
 
 logger = logging.getLogger(__name__)
@@ -95,7 +95,8 @@ async def process_strava_activity(activity_id: int):
             if hevy_end_time_str:
                 hevy_time = datetime.fromisoformat(hevy_end_time_str.replace("Z", "+00:00"))
                 time_delta = abs((strava_start_date - hevy_time).total_seconds())
-                if time_delta <= settings.SYNC_WINDOW_SECONDS:
+                sync_window = int(get_config("SYNC_WINDOW_SECONDS") or settings.SYNC_WINDOW_SECONDS)
+                if time_delta <= sync_window:
                     matching_hevy_workout = workout
                     break
         
