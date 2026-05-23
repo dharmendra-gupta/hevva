@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import httpx
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import Depends, FastAPI, Request, HTTPException
 from fastapi.responses import RedirectResponse, HTMLResponse
 from pydantic import BaseModel
 from core.config import settings
@@ -9,6 +9,7 @@ from core.processing import process_strava_activity
 from core.webhook import register_webhook
 from core.database import get_config, get_strava_tokens, set_config, update_strava_tokens
 from core.strava_oauth import exchange_code_for_tokens
+from core.auth import require_auth
 
 logger = logging.getLogger(__name__)
 app = FastAPI()

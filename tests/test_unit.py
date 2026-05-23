@@ -10,6 +10,9 @@ from core.processing import process_strava_activity, format_hevy_workout
 from core.strava_oauth import exchange_code_for_tokens, refresh_strava_token, get_strava_headers
 from core.webhook import register_webhook, get_existing_subscription
 from core.config import settings
+from core.auth import require_auth
+from fastapi import FastAPI, Depends
+from fastapi.testclient import TestClient
 
 
 @pytest.fixture(autouse=True)
@@ -551,3 +554,38 @@ async def test_get_existing_subscription_empty_list_returns_none():
 
         result = await get_existing_subscription()
         assert result is None
+
+
+# ---------------------------------------------------------------------------
+# require_auth
+# ---------------------------------------------------------------------------
+
+@pytest.fixture
+def auth_client():
+    _app = FastAPI()
+
+    @_app.get("/protected")
+    def protected(_: None = Depends(require_auth)):
+        return {"ok": True}
+
+    return TestClient(_app, raise_server_exceptions=False)
+
+
+def test_require_auth_no_credentials_returns_401(auth_client):
+    response = auth_client.get("/protected")
+    assert response.status_code == 401
+
+
+def test_require_auth_wrong_password_returns_401(auth_client):
+    response = auth_client.get("/protected", auth=("admin", "wrongpassword"))
+    assert response.status_code == 401
+
+
+def test_require_auth_wrong_username_returns_401(auth_client):
+    response = auth_client.get("/protected", auth=("wronguser", "changeme"))
+    assert response.status_code == 401
+
+
+def test_require_auth_correct_credentials_passes(auth_client):
+    response = auth_client.get("/protected", auth=("admin", "changeme"))
+    assert response.status_code == 200

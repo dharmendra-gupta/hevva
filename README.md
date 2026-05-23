@@ -253,6 +253,8 @@ Webhook subscription registered (id=XXXXX)
 | `STRAVA_REDIRECT_URI` | Yes | — | Must match your Strava app settings exactly |
 | `DOMAIN` | Caddy only | — | Your domain — used by the `:caddy` image for auto-HTTPS |
 | `SYNC_WINDOW_SECONDS` | No | `1800` | How close in time (seconds) a Hevy workout must be to a Strava activity to be matched |
+| `DASHBOARD_USERNAME` | Yes | — | Username for the web dashboard |
+| `DASHBOARD_PASSWORD` | Yes | — | Password for the web dashboard |
 
 ---
 

@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     HEVY_API_BASE_URL: str = "https://api.hevyapp.com"
     WEBHOOK_CALLBACK_URL: str | None = None
     STRAVA_REDIRECT_URI: str = "http://localhost:8888/callback"
+    DASHBOARD_USERNAME: str
+    DASHBOARD_PASSWORD: str
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
