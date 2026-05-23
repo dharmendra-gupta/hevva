@@ -5,3 +5,5 @@ sqlalchemy
 httpx
 pytest
 python-multipart
+aiofiles
+jinja2
