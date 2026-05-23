@@ -319,7 +319,7 @@ def test_dashboard_returns_html_when_authorized(client):
     with patch("main.get_strava_tokens", return_value=("tok", "ref", 9999999999)):
         response = client.get("/", auth=("admin", "changeme"))
     assert response.status_code == 200
-    assert "Hevva" in response.text
+    assert "hevva" in response.text
     assert "Strava authorized" in response.text
     assert "Sync window" in response.text
 

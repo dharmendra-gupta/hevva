@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --md-primary-fg-color:        #7C3AED;
+  --md-primary-fg-color--light: #9d6ef5;
+  --md-primary-fg-color--dark:  #6025c5;
+  --md-accent-fg-color:         #E11D48;
+  --hevva-grad: linear-gradient(135deg, #7C3AED 0%, #E11D48 55%, #F97316 100%);
+}
+
+/* Brand fonts */
+body, .md-typeset {
+  font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+}
+.md-typeset code, .md-typeset pre, .highlight {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Gradient on site title */
+.md-header__title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Gradient wordmark on homepage hero */
+.md-typeset h1 {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}

@@ -1,22 +1,29 @@
-site_name: Hevva
+site_name: hevva
 site_description: Event-driven sync engine for dual-tracking athletes — inject Hevy workout data into Strava automatically.
 site_url: https://dharmendra-gupta.github.io/hevva/
 repo_url: https://github.com/dharmendra-gupta/hevva
 repo_name: dharmendra-gupta/hevva
 edit_uri: ""
+docs_dir: frontend/docs
+site_dir: frontend/site
 
 theme:
   name: material
+  logo: assets/images/hevva-mark.svg
+  favicon: assets/images/favicon-32.png
+  font:
+    text: Space Grotesk
+    code: JetBrains Mono
   palette:
     - scheme: default
-      primary: deep orange
-      accent: deep orange
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     - scheme: slate
-      primary: deep orange
-      accent: deep orange
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
@@ -24,6 +31,9 @@ theme:
     - navigation.instant
     - navigation.top
     - content.code.copy
+
+extra_css:
+  - stylesheets/extra.css
 
 nav:
   - Home: index.md

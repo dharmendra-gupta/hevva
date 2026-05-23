@@ -44,4 +44,5 @@ htmlcov/
 logs/
 
 # MkDocs build output
+frontend/site/
 site/

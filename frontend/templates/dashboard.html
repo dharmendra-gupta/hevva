@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>hevva</title>
+  <link rel="icon" type="image/png" href="/static/favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --grad: linear-gradient(135deg, #7C3AED 0%, #E11D48 55%, #F97316 100%); --violet: #7C3AED; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Space Grotesk', system-ui, sans-serif; background: #f5f5f5; color: #14110f; padding: 2rem; }
+    .wrap { max-width: 480px; margin: 0 auto; }
+    .brand { display: flex; align-items: center; gap: 12px; margin-bottom: .25rem; }
+    .brand img { width: 36px; height: 36px; }
+    .brand h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.03em; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .sub { color: #6b6660; font-size: .82rem; font-family: 'JetBrains Mono', monospace; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 1.75rem; }
+    .card { background: #fff; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,.07); border: 1px solid #e8e4dd; }
+    .card h2 { font-size: .78rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: #6b6660; font-family: 'JetBrains Mono', monospace; margin-bottom: .75rem; }
+    .badge { display: inline-block; padding: .2rem .65rem; border-radius: 4px; font-size: .78rem; font-weight: 600; }
+    .badge.ok  { background: #d1fae5; color: #065f46; }
+    .badge.warn { background: #fef3c7; color: #92400e; }
+    label { display: block; font-size: .85rem; font-weight: 500; margin-bottom: .35rem; margin-top: .75rem; }
+    input[type=number] { width: 100%; padding: .45rem .7rem; border: 1px solid #e8e4dd; border-radius: 6px; font-size: .85rem; font-family: 'Space Grotesk', sans-serif; }
+    .hint { font-size: .75rem; color: #9e9890; margin-top: .3rem; font-family: 'JetBrains Mono', monospace; }
+    button { margin-top: 1rem; background: var(--violet); color: #fff; border: none; padding: .55rem 1.2rem; border-radius: 6px; font-size: .85rem; font-weight: 600; cursor: pointer; font-family: 'Space Grotesk', sans-serif; }
+    button:hover { background: #6025c5; }
+    .msg-ok  { margin-top: .75rem; font-size: .8rem; color: #065f46; font-family: 'JetBrains Mono', monospace; }
+    .msg-err { margin-top: .75rem; font-size: .8rem; color: #b91c1c; font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <img src="/static/hevva-mark.svg" alt="hevva">
+      <h1>hevva</h1>
+    </div>
+    <p class="sub">sync your sets</p>
+
+    <div class="card">
+      <h2>Status</h2>
+      {% if authorized %}
+        <span class="badge ok">Strava authorized</span>
+      {% else %}
+        <span class="badge warn">Not authorized</span>
+        <p style="margin-top:.5rem;font-size:.8rem"><a href="/auth/login">Authorize Strava</a></p>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h2>Settings</h2>
+      <form method="post" action="/api/config">
+        <input type="hidden" name="key" value="SYNC_WINDOW_SECONDS">
+        <label for="sw">Sync window (seconds)</label>
+        <input type="number" id="sw" name="value" value="{{ sync_window }}" min="60" max="86400">
+        <p class="hint">How close in time a Hevy workout must be to a Strava activity to be matched. Default: 1800 (30 min)</p>
+        <button type="submit">Save</button>
+      </form>
+      {% if saved %}
+        <p class="msg-ok">Settings saved.</p>
+      {% elif error %}
+        <p class="msg-err">{{ error }}</p>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>
