@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import httpx
-from fastapi import Depends, FastAPI, Request, HTTPException
+from fastapi import Depends, FastAPI, Form, Request, HTTPException
 from fastapi.responses import RedirectResponse, HTMLResponse
 from pydantic import BaseModel
 from core.config import settings
@@ -13,6 +13,67 @@ from core.auth import require_auth
 
 logger = logging.getLogger(__name__)
 app = FastAPI()
+
+CONFIGURABLE_KEYS = {"SYNC_WINDOW_SECONDS"}
+
+
+def _dashboard_html(saved: bool = False, error: str | None = None) -> str:
+    authorized = bool(get_strava_tokens())
+    sync_window = get_config("SYNC_WINDOW_SECONDS") or str(settings.SYNC_WINDOW_SECONDS)
+    status_color = "#d1fae5" if authorized else "#fef3c7"
+    status_text_color = "#065f46" if authorized else "#92400e"
+    status_label = "Strava authorized" if authorized else "Not authorized"
+    auth_hint = "" if authorized else '<p style="margin-top:.5rem;font-size:.8rem"><a href="/auth/login">Authorize Strava</a></p>'
+    msg = ""
+    if saved:
+        msg = '<p style="margin-top:.75rem;font-size:.8rem;color:#065f46">Settings saved.</p>'
+    if error:
+        msg = f'<p style="margin-top:.75rem;font-size:.8rem;color:#b91c1c">{error}</p>'
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hevva</title>
+  <style>
+    *{{box-sizing:border-box;margin:0;padding:0}}
+    body{{font-family:system-ui,sans-serif;background:#f5f5f5;color:#222;padding:2rem}}
+    .wrap{{max-width:480px;margin:0 auto}}
+    h1{{font-size:1.3rem;margin-bottom:.2rem}}
+    .sub{{color:#666;font-size:.85rem;margin-bottom:1.75rem}}
+    .card{{background:#fff;border-radius:8px;padding:1.5rem;margin-bottom:1rem;box-shadow:0 1px 3px rgba(0,0,0,.08)}}
+    .card h2{{font-size:.95rem;font-weight:600;margin-bottom:.75rem}}
+    .badge{{display:inline-block;padding:.2rem .65rem;border-radius:4px;font-size:.78rem;font-weight:600;background:{status_color};color:{status_text_color}}}
+    label{{display:block;font-size:.85rem;font-weight:500;margin-bottom:.35rem;margin-top:.75rem}}
+    input[type=number]{{width:100%;padding:.45rem .7rem;border:1px solid #ddd;border-radius:6px;font-size:.85rem}}
+    .hint{{font-size:.75rem;color:#999;margin-top:.3rem}}
+    button{{margin-top:1rem;background:#fc4c02;color:#fff;border:none;padding:.55rem 1.1rem;border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer}}
+    button:hover{{background:#e04400}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Hevva</h1>
+    <p class="sub">Strava ↔ Hevy sync dashboard</p>
+    <div class="card">
+      <h2>Status</h2>
+      <span class="badge">{status_label}</span>
+      {auth_hint}
+    </div>
+    <div class="card">
+      <h2>Settings</h2>
+      <form method="post" action="/api/config">
+        <input type="hidden" name="key" value="SYNC_WINDOW_SECONDS">
+        <label for="sw">Sync window (seconds)</label>
+        <input type="number" id="sw" name="value" value="{sync_window}" min="60" max="86400">
+        <p class="hint">How close in time a Hevy workout must be to a Strava activity to be matched. Default: 1800 (30 min)</p>
+        <button type="submit">Save</button>
+      </form>
+      {msg}
+    </div>
+  </div>
+</body>
+</html>"""
 
 
 @app.on_event("startup")
@@ -35,6 +96,26 @@ class WebhookEvent(BaseModel):
     owner_id: int
     subscription_id: int
     updates: dict
+
+
+@app.get("/", response_class=HTMLResponse)
+async def dashboard(request: Request, saved: str = "", _: None = Depends(require_auth)):
+    return _dashboard_html(saved=saved == "1")
+
+
+@app.post("/api/config")
+async def update_config(key: str = Form(...), value: str = Form(...), _: None = Depends(require_auth)):
+    if key not in CONFIGURABLE_KEYS:
+        return HTMLResponse(_dashboard_html(error=f"Unknown config key: {key}"), status_code=400)
+    if key == "SYNC_WINDOW_SECONDS":
+        try:
+            v = int(value)
+            if not (60 <= v <= 86400):
+                raise ValueError
+        except ValueError:
+            return HTMLResponse(_dashboard_html(error="Sync window must be between 60 and 86400 seconds."), status_code=400)
+    set_config(key, value)
+    return RedirectResponse("/?saved=1", status_code=303)
 
 
 @app.get("/health")
